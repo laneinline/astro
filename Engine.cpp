@@ -111,25 +111,21 @@ void Engine::update()
 
 	//std::cout << "Calculating objects in world..." << std::endl;
 	if (keyState[SDL_SCANCODE_UP]) {
-		//spaceship.posRect.y -= 5;
 		spaceship.move(winRect);
 		std::cout << " Up " << std::endl;
 	}
 
 	if (keyState[SDL_SCANCODE_DOWN]) {
-		//spaceship.posRect.y += 5;
+
 		std::cout << " Down " << std::endl;
 	}
 
 	if (keyState[SDL_SCANCODE_LEFT]) {
-		//spaceship.posRect.x -= 5;
 		spaceship.setAngle(spaceship.getAngle() - 5);
 		std::cout << " Left " << std::endl;
 	}
 
 	if (keyState[SDL_SCANCODE_RIGHT]) {
-		//spaceship.posRect.x += 5;
-		//setObjPos(&spaceship);
 		spaceship.setAngle(spaceship.getAngle() + 5);
 		std::cout << " Right " << std::endl;
 	}
@@ -143,12 +139,15 @@ void Engine::draw()
 
 	SDL_RenderCopy(winRenderer, background.getTexture(), NULL, NULL);
 
+
+
 	for (int i = 0; i < asteroidQuant; i++) {
-		SDL_RenderCopy(winRenderer, asteroid[i].getTexture(), NULL, &asteroid[i].posRect);
+		renderRect = asteroid[i].getPosRect();
+		SDL_RenderCopy(winRenderer, asteroid[i].getTexture(), NULL, &renderRect);
 	}
-
-
-	SDL_RenderCopyEx(winRenderer, spaceship.getTexture(), NULL, &spaceship.posRect,(double)(spaceship.getAngle()+90),NULL,SDL_FLIP_NONE);
+	
+	renderRect = spaceship.getPosRect();
+	SDL_RenderCopyEx(winRenderer, spaceship.getTexture(), NULL, &renderRect, (double)(spaceship.getAngle() + 90), NULL, SDL_FLIP_NONE);
 
 	SDL_RenderPresent(winRenderer);
 
@@ -166,14 +165,3 @@ void Engine::run()
 
 }
 
-void Engine::setObjPos(SpaceObj* obj)
-{
-	if ((obj->posRect.x + obj->posRect.w) <= winRect.w) {
-		std::cout << " ship position X : " << obj->posRect.x << " W " << obj->posRect.w << " window W : " << winRect.w;
-		obj->posRect.x += 5;
-	}
-	else {
-		obj->posRect.x = winRect.x;
-	}
-
-}

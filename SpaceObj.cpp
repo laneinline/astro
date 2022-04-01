@@ -35,16 +35,6 @@ SpaceObj::~SpaceObj()
 
 
 
-int SpaceObj::getPosX()
-{
-	return posX;
-}
-
-int SpaceObj::getPosY()
-{
-	return posY;
-}
-
 SDL_Texture* SpaceObj::getTexture()
 {
 	return texture;
@@ -69,6 +59,11 @@ void SpaceObj::loadTexture(SDL_Renderer* renderer)
 		}
 		//SDL_FreeSurface(winSurface);
 
+}
+
+SDL_Rect SpaceObj::getPosRect()
+{
+	return posRect;
 }
 
 int SpaceObj::getAngle()

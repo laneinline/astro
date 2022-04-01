@@ -8,6 +8,7 @@ int main(int args, char *argv[]) {
 	Engine engine = Engine(800,600);
 	engine.run();
 
+	//TODO make timer 
 
 	
 

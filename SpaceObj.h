@@ -12,18 +12,15 @@ public:
 	~SpaceObj();
 
 
-	int getPosX();
-	int getPosY();
 	SDL_Texture* getTexture();
 	
 	void loadTexture(SDL_Renderer* renderer);
 
 
-	
-	SDL_Rect posRect;
-	
+	SDL_Rect getPosRect();
 	int getAngle();
 	void setAngle(int ang);
+	
 	int getSpeed();
 
 	void move(SDL_Rect boundary);
@@ -36,9 +33,7 @@ private:
 	SDL_Surface *surface;
 	SDL_Texture *texture;
 
-	int posX;
-	int	posY;
-
+	SDL_Rect posRect;
 	int angle;
 	int velocity;
 

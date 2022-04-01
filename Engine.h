@@ -30,11 +30,14 @@ public:
 
 private:
 	
-	void setObjPos(SpaceObj *obj);//dummy for creen handle
+
 
 	SDL_Rect winRect;
 	SDL_Window* window;
 	SDL_Renderer* winRenderer;
+
+	SDL_Rect renderRect; // TODO  handle pointers somehow another, i'm to tired to do it now, that is dumb solution
+
 	SDL_Event ev;
 
 	const Uint8* keyState;
