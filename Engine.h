@@ -20,6 +20,10 @@ public:
 	void run();
 
 	void loadImage(std::string path);
+
+	void crAsteroid(int size);
+	void crSpaceship();
+	void crBullet();
 	
 
 private:

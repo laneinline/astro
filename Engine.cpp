@@ -10,35 +10,22 @@
 
 Engine::Engine(int width, int height)
 {
-
-	preInit(width,height);	
 	isRunning = true;
+	preInit(width,height);
+	init();
+	
 
-
-	if (SDL_Init(SDL_INIT_VIDEO) < 0) { std::cout << "Video initialization Error" << SDL_GetError() << std::endl; }
-	else {
-		window = SDL_CreateWindow("that is window title", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, winRect.w, winRect.h, SDL_WINDOW_SHOWN);
-		if (window == NULL) { std::cout << "Windwow creation error" << SDL_GetError() << std::endl; }
-		else {
-			std::cout << "Window created, size: w: " << winRect.w << " h: " << winRect.h << std::endl;
-
-			winRenderer = SDL_CreateRenderer(window, -1, SDL_RENDERER_ACCELERATED | SDL_RENDERER_PRESENTVSYNC);
-			if (winRenderer == NULL) { std::cout << "Error creating Renderer" << std::endl;; }
-			else { std::cout << "Renderer created sucessfully" << std::endl;; 
-
-			loadImage("img/bgnd.png");
-
-
-
-			}//end of renderer
-		}// end of window
-	}//end of Init
+	loadImage("img/bgnd.png");
 
 }
 
 Engine::~Engine()
 {
 	isRunning = false;
+
+	SDL_DestroyTexture(winTexture);
+	winTexture = nullptr;
+	if(winSurface!=NULL)
 	SDL_FreeSurface(winSurface);
 	winSurface = nullptr;
 	SDL_DestroyWindow(window);
@@ -57,6 +44,25 @@ void Engine::preInit(int width, int height)
 	if (height >= 240 && height < 4500) winRect.h = height;
 	else { std::cout << "Error creating window: window height is not supported" << std::endl; }
 
+}
+
+void Engine::init()
+{
+	if (SDL_Init(SDL_INIT_VIDEO) < 0) { std::cout << "Video initialization Error" << SDL_GetError() << std::endl; }
+	else {
+		window = SDL_CreateWindow("that is window title", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, winRect.w, winRect.h, SDL_WINDOW_SHOWN);
+		if (window == NULL) { std::cout << "Windwow creation error" << SDL_GetError() << std::endl; }
+		else {
+			std::cout << "Window created, size: w: " << winRect.w << " h: " << winRect.h << std::endl;
+
+			winRenderer = SDL_CreateRenderer(window, -1, SDL_RENDERER_ACCELERATED | SDL_RENDERER_PRESENTVSYNC);
+			if (winRenderer == NULL) { std::cout << "Error creating Renderer" << std::endl;; }
+			else {
+				std::cout << "Renderer created sucessfully" << std::endl;;
+
+			}//end of renderer
+		}// end of window
+	}//end of Init
 }
 
 
@@ -96,7 +102,7 @@ void Engine::loadImage(std::string path)
 	}
 	else { std::cout << "Texture created from surface sucessfully" << std::endl;
 	}
-
+	//SDL_FreeSurface(winSurface);
 
 }
 
