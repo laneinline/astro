@@ -8,17 +8,14 @@
 // Create the SDL renderer by executing SDL_CreateRenderer(); 
 // Create the texture… 
 
-Engine::Engine()
+Engine::Engine(int width, int height)
 {
-	//SDL_Window* window = nullptr;
-	//SDL_Surface* winSurface = nullptr;
-	//window = nullptr;
-	//winSurface = nullptr;
 
 	winRect.x = 0; //window dimensions
 	winRect.y = 0;
 	winRect.w = 640;
 	winRect.h = 480;
+	
 	
 	isRunning = true;
 
@@ -28,7 +25,7 @@ Engine::Engine()
 		window = SDL_CreateWindow("that is window title", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, winRect.w, winRect.h, SDL_WINDOW_SHOWN);
 		if (window == NULL) { std::cout << "Windwow creation error" << SDL_GetError() << std::endl; }
 		else {
-			std::cout << "Window created, size: w: " << winRect.w << " h: " << winRect.w << std::endl;
+			std::cout << "Window created, size: w: " << winRect.w << " h: " << winRect.h << std::endl;
 
 			winRenderer = SDL_CreateRenderer(window, -1, SDL_RENDERER_ACCELERATED | SDL_RENDERER_PRESENTVSYNC);
 			if (winRenderer == NULL) { std::cout << "Error creating Renderer" << std::endl;; }
@@ -36,19 +33,6 @@ Engine::Engine()
 
 			loadImage("img/bgnd.png");
 
-			while (isRunning) {//start of main loop
-				while (SDL_PollEvent(&ev)) {//handle  window close button
-					if (ev.type == SDL_QUIT) { isRunning = false; };
-				}
-
-
-				SDL_RenderClear(winRenderer);
-				SDL_RenderCopy(winRenderer, winTexture, NULL, NULL);
-				SDL_RenderPresent(winRenderer);
-
-
-
-				}//end of main loop
 			}//end of renderer
 		}// end of window
 	}//end of Init
@@ -57,13 +41,37 @@ Engine::Engine()
 
 Engine::~Engine()
 {
-	//window = nullptr;
-	//winSurface = nullptr;
+
 	SDL_FreeSurface(winSurface);
 	winSurface = nullptr;
 	SDL_DestroyWindow(window);
 	window = nullptr;
 	SDL_Quit();
+}
+
+
+void Engine::processInput()
+{
+	std::cout << "Processing input..." << std::endl;
+	
+	while (SDL_PollEvent(&ev)) {//handle  window close button
+		if (ev.type == SDL_QUIT) { isRunning = false; };
+	}
+}
+
+void Engine::updade()
+{
+	std::cout << "Calculating objects in world..." << std::endl;
+}
+
+void Engine::draw()
+{
+	std::cout << "Render everything and out to display ..." << std::endl;
+
+	SDL_RenderClear(winRenderer);
+	SDL_RenderCopy(winRenderer, winTexture, NULL, NULL);
+	SDL_RenderPresent(winRenderer);
+
 }
 
 void Engine::loadImage(std::string path)
@@ -78,6 +86,18 @@ void Engine::loadImage(std::string path)
 	}
 	else { std::cout << "Texture created from surface sucessfully" << std::endl;
 	}
+
+
+}
+
+void Engine::run()
+{
+	while (isRunning) {//start of main loop
+		processInput();
+		updade();
+		draw();
+	}//end of main loop
+
 
 
 }

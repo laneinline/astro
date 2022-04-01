@@ -7,13 +7,21 @@
 class Engine
 {
 public: 
-	Engine();
+	Engine(int width, int height);
 	~Engine();
+
+	void preInit(int width, int height);
 	void init();
+	
 	void processInput();
 	void updade();
 	void draw();
+	
+	void run();
+
 	void loadImage(std::string path);
+	
+
 private:
 	
 	SDL_Rect winRect;
