@@ -47,17 +47,19 @@ void Engine::preInit(int width, int height)
 
 void Engine::init()
 {
-	if (SDL_Init(SDL_INIT_VIDEO) < 0) { std::cout << "Video initialization Error" << SDL_GetError() << std::endl; }
+	if (SDL_Init(SDL_INIT_VIDEO) < 0) { std::cout << " Error Video initialization " << SDL_GetError() << std::endl; }
 	else {
-		window = SDL_CreateWindow("that is window title", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, winRect.w, winRect.h, SDL_WINDOW_SHOWN);
-		if (window == NULL) { std::cout << "Windwow creation error" << SDL_GetError() << std::endl; }
+		std::cout << "Video initialized sucessfully" << std::endl;
+
+		window = SDL_CreateWindow("That is asteroids game", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, winRect.w, winRect.h, SDL_WINDOW_SHOWN);
+		if (window == NULL) { std::cout << " Error Windwow creation" << SDL_GetError() << std::endl; }
 		else {
 			std::cout << "Window created, size: w: " << winRect.w << " h: " << winRect.h << std::endl;
 
 			winRenderer = SDL_CreateRenderer(window, -1, SDL_RENDERER_ACCELERATED | SDL_RENDERER_PRESENTVSYNC);
-			if (winRenderer == NULL) { std::cout << "Error creating Renderer" << std::endl;; }
+			if (winRenderer == NULL) { std::cout << "Error Renderer creation " << std::endl; }
 			else {
-				std::cout << "Renderer created sucessfully" << std::endl;;
+				std::cout << "Renderer created sucessfully" << std::endl;
 
 			}//end of renderer
 		}// end of window
@@ -93,18 +95,22 @@ void Engine::processInput()
 	keyState = SDL_GetKeyboardState(NULL);
 
 	if (keyState[SDL_SCANCODE_UP]) {
+		spaceship.posRect.y -= 5;
 		std::cout << " Up " << std::endl;
 	}
 
 	if (keyState[SDL_SCANCODE_DOWN]) {
+		spaceship.posRect.y += 5;
 		std::cout << " Down " << std::endl;
 	}
 
 	if (keyState[SDL_SCANCODE_LEFT]) {
+		spaceship.posRect.x -= 5;
 		std::cout << " Left " << std::endl;
 	}
 
 	if (keyState[SDL_SCANCODE_RIGHT]) {
+		spaceship.posRect.x += 5;
 		std::cout << " Right " << std::endl;
 	}
 		
