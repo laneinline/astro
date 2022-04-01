@@ -66,21 +66,58 @@ void Engine::init()
 
 void Engine::processInput()
 {
-	std::cout << "Processing input..." << std::endl;
+	//std::cout << "Processing input..." << std::endl;
 	
 	while (SDL_PollEvent(&ev)) {//handle  window close button
-		if (ev.type == SDL_QUIT) { isRunning = false; };
+		if (ev.type == SDL_QUIT) {
+			isRunning = false; };
+
+		if (ev.type == SDL_MOUSEBUTTONDOWN) { //TODO somewhere here mouse click locks program
+			SDL_GetMouseState(&mousePos.x, &mousePos.y);
+
+			if (ev.button.button == SDL_BUTTON_LEFT) {
+				std::cout << " Left mouse button down at: " << mousePos.x << " x " << mousePos.y << std::endl;
+			}
+			else if (ev.button.button == SDL_BUTTON_MIDDLE) {
+				std::cout << " Middle mouse button down at: " << mousePos.x << " x " << mousePos.y << std::endl;
+			}
+			else if (ev.button.button == SDL_BUTTON_RIGHT) {
+				std::cout << " Right mouse button down at: " << mousePos.x << " x " << mousePos.y << std::endl;
+			}
+
+		}
+		
 	}
+
+	keyState = SDL_GetKeyboardState(NULL);
+
+	if (keyState[SDL_SCANCODE_UP]) {
+		std::cout << " Up " << std::endl;
+	}
+
+	if (keyState[SDL_SCANCODE_DOWN]) {
+		std::cout << " Down " << std::endl;
+	}
+
+	if (keyState[SDL_SCANCODE_LEFT]) {
+		std::cout << " Left " << std::endl;
+	}
+
+	if (keyState[SDL_SCANCODE_RIGHT]) {
+		std::cout << " Right " << std::endl;
+	}
+		
+
 }
 
 void Engine::update()
 {
-	std::cout << "Calculating objects in world..." << std::endl;
+	//std::cout << "Calculating objects in world..." << std::endl;
 }
 
 void Engine::draw()
 {
-	std::cout << "Render everything and out to display ..." << std::endl;
+	//std::cout << "Render everything and out to display ..." << std::endl;
 
 	SDL_RenderClear(winRenderer);
 

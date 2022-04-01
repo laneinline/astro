@@ -32,6 +32,9 @@ private:
 	SDL_Renderer* winRenderer;
 	SDL_Event ev;
 
+	const Uint8* keyState;
+	SDL_Point mousePos;
+
 	bool isRunning;
 
 	SpaceObj asteroid1;

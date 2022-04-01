@@ -24,7 +24,7 @@ SpaceObj::~SpaceObj()
 {
 	//SDL_DestroyTexture(texture);
 	//texture = nullptr;
-	SDL_FreeSurface(surface);
+	//SDL_FreeSurface(surface);
 	//surface = nullptr;
 
 }
