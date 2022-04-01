@@ -11,12 +11,7 @@
 Engine::Engine(int width, int height)
 {
 
-	winRect.x = 0; //window dimensions
-	winRect.y = 0;
-	winRect.w = 640;
-	winRect.h = 480;
-	
-	
+	preInit(width,height);	
 	isRunning = true;
 
 
@@ -33,6 +28,8 @@ Engine::Engine(int width, int height)
 
 			loadImage("img/bgnd.png");
 
+
+
 			}//end of renderer
 		}// end of window
 	}//end of Init
@@ -41,12 +38,25 @@ Engine::Engine(int width, int height)
 
 Engine::~Engine()
 {
-
+	isRunning = false;
 	SDL_FreeSurface(winSurface);
 	winSurface = nullptr;
 	SDL_DestroyWindow(window);
 	window = nullptr;
 	SDL_Quit();
+}
+
+void Engine::preInit(int width, int height)
+{
+	winRect.x = 0; //window dimensions
+	winRect.y = 0;
+	winRect.w = 640;
+	winRect.h = 480;
+	if (width >= 320 && width < 8500) winRect.w = width;
+	else { std::cout << "Error creating window: window width is not supported" << std::endl; }
+	if (height >= 240 && height < 4500) winRect.h = height;
+	else { std::cout << "Error creating window: window height is not supported" << std::endl; }
+
 }
 
 
