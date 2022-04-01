@@ -3,6 +3,7 @@
 #include <SDL.h>
 #include <SDL_image.h>
 #include <string>
+#include "SpaceObj.h"
 
 class Engine
 {
@@ -35,5 +36,7 @@ private:
 	SDL_Renderer* winRenderer;
 	SDL_Event ev;
 	bool isRunning;
+
+	SpaceObj asteroid1;
 };
 

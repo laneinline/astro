@@ -1,4 +1,5 @@
 #include "Engine.h"
+#include "Asteroid.h"
 #include <iostream>
 
 // copy SDL2 directory into project folder
@@ -11,10 +12,11 @@
 Engine::Engine(int width, int height)
 {
 	isRunning = true;
+	
 	preInit(width,height);
 	init();
+	asteroid1 = SpaceObj(winRenderer, 100,100);
 	
-
 	loadImage("img/bgnd.png");
 
 }
@@ -85,7 +87,10 @@ void Engine::draw()
 	std::cout << "Render everything and out to display ..." << std::endl;
 
 	SDL_RenderClear(winRenderer);
-	SDL_RenderCopy(winRenderer, winTexture, NULL, NULL);
+	SDL_RenderCopy(winRenderer, winTexture, NULL, NULL); //background
+
+	SDL_RenderCopy(winRenderer, asteroid1.getTexture(),NULL, &asteroid1.posRect);
+
 	SDL_RenderPresent(winRenderer);
 
 }
