@@ -17,6 +17,7 @@ Engine::Engine(int width, int height)
 	init();
 	background = SpaceObj(winRenderer, 0, 0, "img/background.png");
 	asteroid1 = SpaceObj(winRenderer, 100,100, "img/big_asteroid.png");
+	spaceship = SpaceObj(winRenderer, winRect.w / 2, winRect.h / 2, "img/spaceship.png");
 	
 
 }
@@ -123,6 +124,7 @@ void Engine::draw()
 
 	SDL_RenderCopy(winRenderer, background.getTexture(), NULL, NULL);
 	SDL_RenderCopy(winRenderer, asteroid1.getTexture(),NULL, &asteroid1.posRect);
+	SDL_RenderCopy(winRenderer, spaceship.getTexture(), NULL, &spaceship.posRect);
 
 	SDL_RenderPresent(winRenderer);
 

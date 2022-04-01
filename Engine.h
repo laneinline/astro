@@ -39,6 +39,7 @@ private:
 
 	SpaceObj asteroid1;
 	SpaceObj background;
+	SpaceObj spaceship;
 
 };
 
