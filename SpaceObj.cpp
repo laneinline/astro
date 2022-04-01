@@ -5,17 +5,28 @@ SpaceObj::SpaceObj()
 {
 }
 
-SpaceObj::SpaceObj(SDL_Renderer *renderer, int x, int y)
+SpaceObj::SpaceObj(SDL_Renderer *renderer, int x, int y, std::string path)
 {
-	path2img = "img/big_asteroid.png";
+	//TODO add checks & handlers
+	path2img = path;
 	
 	posRect.x = x;
+	
 	posRect.y = y;
 
 	loadTexture(renderer);
-
 	SDL_QueryTexture(texture,NULL,NULL,&posRect.w,&posRect.h);
-	std::cout << "posRect x: " << posRect.x << " y: " << posRect.y << " w: " << posRect.w << " h: " << posRect.h << std::endl;
+
+	std::cout << typeid(this).name() << "posRect x: " << posRect.x << " y: " << posRect.y << " w: " << posRect.w << " h: " << posRect.h << std::endl;
+}
+
+SpaceObj::~SpaceObj()
+{
+	//SDL_DestroyTexture(texture);
+	//texture = nullptr;
+	SDL_FreeSurface(surface);
+	//surface = nullptr;
+
 }
 
 

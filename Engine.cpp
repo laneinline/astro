@@ -15,9 +15,9 @@ Engine::Engine(int width, int height)
 	
 	preInit(width,height);
 	init();
-	asteroid1 = SpaceObj(winRenderer, 100,100);
+	background = SpaceObj(winRenderer, 0, 0, "img/background.png");
+	asteroid1 = SpaceObj(winRenderer, 100,100, "img/big_asteroid.png");
 	
-	loadImage("img/bgnd.png");
 
 }
 
@@ -25,11 +25,7 @@ Engine::~Engine()
 {
 	isRunning = false;
 
-	SDL_DestroyTexture(winTexture);
-	winTexture = nullptr;
-	if(winSurface!=NULL)
-	SDL_FreeSurface(winSurface);
-	winSurface = nullptr;
+
 	SDL_DestroyWindow(window);
 	window = nullptr;
 	SDL_Quit();
@@ -77,7 +73,7 @@ void Engine::processInput()
 	}
 }
 
-void Engine::updade()
+void Engine::update()
 {
 	std::cout << "Calculating objects in world..." << std::endl;
 }
@@ -87,27 +83,11 @@ void Engine::draw()
 	std::cout << "Render everything and out to display ..." << std::endl;
 
 	SDL_RenderClear(winRenderer);
-	SDL_RenderCopy(winRenderer, winTexture, NULL, NULL); //background
 
+	SDL_RenderCopy(winRenderer, background.getTexture(), NULL, NULL);
 	SDL_RenderCopy(winRenderer, asteroid1.getTexture(),NULL, &asteroid1.posRect);
 
 	SDL_RenderPresent(winRenderer);
-
-}
-
-void Engine::loadImage(std::string path)
-{
-	winSurface = IMG_Load(path.c_str());
-	if (winSurface == NULL) { std::cout << "Error loading image to surface" << IMG_GetError() << std::endl;
-	}
-	else { std::cout << "Image loaded to surface sucessfully" << std::endl;
-	}
-	winTexture = SDL_CreateTextureFromSurface(winRenderer, winSurface);
-	if (winTexture == NULL) { std::cout << "Error loading surface to texture" << IMG_GetError() << std::endl;
-	}
-	else { std::cout << "Texture created from surface sucessfully" << std::endl;
-	}
-	//SDL_FreeSurface(winSurface);
 
 }
 
@@ -115,7 +95,7 @@ void Engine::run()
 {
 	while (isRunning) {//start of main loop
 		processInput();
-		updade();
+		update();
 		draw();
 	}//end of main loop
 
