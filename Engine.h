@@ -42,6 +42,7 @@ private:
 
 	bool isRunning;
 
+	int asteroidQuant;
 	SpaceObj asteroid[10];
 
 	SpaceObj background;

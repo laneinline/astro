@@ -16,7 +16,12 @@ Engine::Engine(int width, int height)
 	preInit(width,height);
 	init();
 	background = SpaceObj(winRenderer, 0, 0, "img/background.png");
-	asteroid[0] = SpaceObj(winRenderer, 100, 100, "img/big_asteroid.png");
+
+	asteroidQuant = 10;
+	for (int i = 0; i < asteroidQuant; i++) {
+		asteroid[i] = SpaceObj(winRenderer, 100, 100, "img/big_asteroid.png");
+	}
+	
 	spaceship = SpaceObj(winRenderer, winRect.w / 2, winRect.h / 2, "img/spaceship.png");
 	
 
@@ -98,8 +103,11 @@ void Engine::processInput()
 
 void Engine::update()
 {
-	asteroid[0].move(winRect);
-	asteroid[0].setAngle(asteroid[0].getAngle() + rand() % 20 - rand() % 20);
+	for (int i = 0; i < asteroidQuant; i++) {
+		asteroid[i].setAngle(asteroid[i].getAngle() + rand() % 20 - rand() % 20);
+		asteroid[i].move(winRect);
+	}
+
 
 	//std::cout << "Calculating objects in world..." << std::endl;
 	if (keyState[SDL_SCANCODE_UP]) {
@@ -134,7 +142,12 @@ void Engine::draw()
 	SDL_RenderClear(winRenderer);
 
 	SDL_RenderCopy(winRenderer, background.getTexture(), NULL, NULL);
-	SDL_RenderCopy(winRenderer, asteroid[0].getTexture(), NULL, &asteroid[0].posRect);
+
+	for (int i = 0; i < asteroidQuant; i++) {
+		SDL_RenderCopy(winRenderer, asteroid[i].getTexture(), NULL, &asteroid[i].posRect);
+	}
+
+
 	SDL_RenderCopyEx(winRenderer, spaceship.getTexture(), NULL, &spaceship.posRect,(double)(spaceship.getAngle()+90),NULL,SDL_FLIP_NONE);
 
 	SDL_RenderPresent(winRenderer);
