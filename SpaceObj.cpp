@@ -1,5 +1,6 @@
 #include "SpaceObj.h"
 #include <iostream>
+#include <cmath>
 
 SpaceObj::SpaceObj()
 {
@@ -11,8 +12,11 @@ SpaceObj::SpaceObj(SDL_Renderer *renderer, int x, int y, std::string path)
 	path2img = path;
 	
 	posRect.x = x;
-	
 	posRect.y = y;
+
+	angle = 0;
+	velocity = 5;
+
 
 	loadTexture(renderer);
 	SDL_QueryTexture(texture,NULL,NULL,&posRect.w,&posRect.h);
@@ -66,5 +70,40 @@ void SpaceObj::loadTexture(SDL_Renderer* renderer)
 		//SDL_FreeSurface(winSurface);
 
 }
+
+int SpaceObj::getAngle()
+{
+	return angle;
+}
+
+void SpaceObj::setAngle(int ang)
+{	
+	angle = ang%360;
+	//std::cout << "angle : " << angle << " ang: " << ang << std::endl;	
+}
+
+void SpaceObj::move(SDL_Rect boundary)
+{
+	posRect.x += velocity * cos(angle * 3.1415 / 180); //cpp cosinus in RADIANS
+	if (posRect.x + posRect.w > boundary.w) {
+		posRect.x = 0;
+	}
+	if (posRect.x < boundary.x) {
+		posRect.x = boundary.w - posRect.w;
+	}
+	//std::cout << " angle : " << angle << " cos(angle) " << cos(angle) << std::endl;
+	posRect.y += velocity * sin(angle * 3.1415 / 180);
+
+	//std::cout << "posRect.y " << posRect.y << " boundary.y " << boundary.y << std::endl;// y - top left corner
+	//std::cout << "posRect.h " << posRect.h << " boundary.h " << boundary.h << std::endl;// y - top left corner
+	if (posRect.y < boundary.y) {
+		posRect.y = boundary.h - posRect.h;
+	}
+	if ((posRect.y + posRect.h) > boundary.h) {
+		posRect.y = 0;
+	}
+
+}
+
 
 

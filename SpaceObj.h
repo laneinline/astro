@@ -11,13 +11,23 @@ public:
 	SpaceObj(SDL_Renderer* renderer, int x, int y, std::string path);
 	~SpaceObj();
 
+
 	int getPosX();
 	int getPosY();
 	SDL_Texture* getTexture();
 	
 	void loadTexture(SDL_Renderer* renderer);
 
+
+	
 	SDL_Rect posRect;
+	
+	int getAngle();
+	void setAngle(int ang);
+	int getSpeed();
+
+	void move(SDL_Rect boundary);
+
 
 private:
 
@@ -29,6 +39,8 @@ private:
 	int posX;
 	int	posY;
 
+	int angle;
+	int velocity;
 
 };
 

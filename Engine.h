@@ -20,6 +20,9 @@ public:
 	
 	void run();
 
+
+
+
 	void crAsteroid(int size);
 	void crSpaceship();
 	void crBullet();
@@ -27,6 +30,8 @@ public:
 
 private:
 	
+	void setObjPos(SpaceObj *obj);//dummy for creen handle
+
 	SDL_Rect winRect;
 	SDL_Window* window;
 	SDL_Renderer* winRenderer;
@@ -37,7 +42,8 @@ private:
 
 	bool isRunning;
 
-	SpaceObj asteroid1;
+	SpaceObj asteroid[10];
+
 	SpaceObj background;
 	SpaceObj spaceship;
 
