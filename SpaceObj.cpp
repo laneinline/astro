@@ -21,7 +21,11 @@ SpaceObj::SpaceObj(SDL_Renderer *renderer, int x, int y, std::string path)
 	loadTexture(renderer);
 	SDL_QueryTexture(texture,NULL,NULL,&posRect.w,&posRect.h);
 
-	std::cout << typeid(this).name() << "posRect x: " << posRect.x << " y: " << posRect.y << " w: " << posRect.w << " h: " << posRect.h << std::endl;
+	radius = posRect.w /2;
+
+	std::cout  << std::endl;
+
+	std::cout << typeid(this).name() << "posRect x: " << posRect.x << " y: " << posRect.y << " w: " << posRect.w << " h: " << posRect.h << " Radius : " << radius << std::endl;
 }
 
 SpaceObj::~SpaceObj()
@@ -77,6 +81,16 @@ void SpaceObj::setAngle(int ang)
 	//std::cout << "angle : " << angle << " ang: " << ang << std::endl;	
 }
 
+int SpaceObj::getVelocity()
+{
+	return velocity;
+}
+
+int SpaceObj::getRadius()
+{
+	return radius;
+}
+
 void SpaceObj::move(SDL_Rect boundary)
 {
 	posRect.x += velocity * cos(angle * 3.1415 / 180); //cpp cosinus in RADIANS
@@ -98,6 +112,41 @@ void SpaceObj::move(SDL_Rect boundary)
 		posRect.y = 0;
 	}
 
+}
+
+void SpaceObj::isIntersect(int x ,int y, int  collisionTargetRadius)
+{
+	centrX = getCentrX(); 
+	centrY = getCentrY();
+
+	//std::cout << " centrX: " << centrX << " centrY: " << centrY  << std::endl;
+	// a^2 +b^2 = c^2 (c = radius my +  radiu target)
+	if (
+		((centrX - x) * (centrX - x))  // x size lenth^2
+		+ ((centrY - y) * (centrY - y)) //y size lenth^2
+		<= (radius * radius //radius my
+			+ collisionTargetRadius * collisionTargetRadius) //radius target
+		) {
+		SDL_SetTextureColorMod(texture, 255, 0, 0);
+	}
+	else {
+		//SDL_SetTextureColorMod(texture, 255, 255, 255);
+	}
+}
+
+int SpaceObj::getCentrX()
+{
+	return posRect.x + radius;
+}
+
+int SpaceObj::getCentrY()
+{
+	return posRect.y + radius;
+}
+
+void SpaceObj::clearTexture()
+{
+	SDL_SetTextureColorMod(texture, 255, 255, 255);
 }
 
 

@@ -21,10 +21,15 @@ public:
 	int getAngle();
 	void setAngle(int ang);
 	
-	int getSpeed();
+	int getVelocity();
+	int getRadius();
 
 	void move(SDL_Rect boundary);
+	void isIntersect(int x, int y, int collisionTargetRadius);
 
+	int getCentrX();
+	int getCentrY();
+	void clearTexture();
 
 private:
 
@@ -34,6 +39,11 @@ private:
 	SDL_Texture *texture;
 
 	SDL_Rect posRect;
+
+	int radius;
+	int centrX;
+	int centrY;
+
 	int angle;
 	int velocity;
 

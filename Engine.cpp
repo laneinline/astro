@@ -19,7 +19,8 @@ Engine::Engine(int width, int height)
 
 	asteroidQuant = 10;
 	for (int i = 0; i < asteroidQuant; i++) {
-		asteroid[i] = SpaceObj(winRenderer, 100, 100, "img/big_asteroid.png");
+		int randPos = rand() % 240 - rand() % 100;
+		asteroid[i] = SpaceObj(winRenderer, randPos, randPos, "img/big_asteroid.png");
 	}
 	
 	spaceship = SpaceObj(winRenderer, winRect.w / 2, winRect.h / 2, "img/spaceship.png");
@@ -57,6 +58,7 @@ void Engine::init()
 		std::cout << "Video initialized sucessfully" << std::endl;
 
 		window = SDL_CreateWindow("That is asteroids game", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, winRect.w, winRect.h, SDL_WINDOW_SHOWN);
+		//std::cout << winRect.w<< " winrect h " << winRect.h;
 		if (window == NULL) { std::cout << " Error Windwow creation" << SDL_GetError() << std::endl; }
 		else {
 			std::cout << "Window created, size: w: " << winRect.w << " h: " << winRect.h << std::endl;
@@ -104,10 +106,24 @@ void Engine::processInput()
 void Engine::update()
 {
 	for (int i = 0; i < asteroidQuant; i++) {
+		asteroid[i].clearTexture();
+		for (int y = 0; y < asteroidQuant; y++) {
+		 if(i!=y)asteroid[i].isIntersect(asteroid[y].getCentrX(), asteroid[y].getCentrY(), asteroid[y].getRadius());
+		}
+
+		asteroid[i].isIntersect(spaceship.getCentrX(), spaceship.getCentrY(), spaceship.getRadius());
+		//asteroid[i].isIntersect(asteroid[i+1].getCentrX(), asteroid[i + 1].getCentrY(), asteroid[i + 1].getRadius());
+
+		
 		asteroid[i].setAngle(asteroid[i].getAngle() + rand() % 20 - rand() % 20);
 		asteroid[i].move(winRect);
+		
 	}
+	spaceship.clearTexture();
+	for (int i = 0; i < asteroidQuant; i++) {
 
+		spaceship.isIntersect(asteroid[i].getCentrX(), asteroid[i].getCentrY(), asteroid[i].getRadius());
+	}
 
 	//std::cout << "Calculating objects in world..." << std::endl;
 	if (keyState[SDL_SCANCODE_UP]) {
@@ -150,6 +166,7 @@ void Engine::draw()
 	SDL_RenderCopyEx(winRenderer, spaceship.getTexture(), NULL, &renderRect, (double)(spaceship.getAngle() + 90), NULL, SDL_FLIP_NONE);
 
 	SDL_RenderPresent(winRenderer);
+	
 
 }
 
