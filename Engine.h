@@ -4,6 +4,8 @@
 #include <SDL_image.h>
 #include <string>
 #include "SpaceObj.h"
+#include "Asteroid.h"
+#include "Bullet.h"
 
 class Engine
 {
@@ -45,11 +47,16 @@ private:
 
 	bool isRunning;
 
-	int asteroidQuant ;
+
 	SpaceObj asteroid[10];
+	int asteroidQuant;
 
 	SpaceObj background;
 	SpaceObj spaceship;
+
+	SpaceObj bullet[10];
+	int bulletQuant ;
+
 
 };
 

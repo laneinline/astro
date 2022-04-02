@@ -1,5 +1,5 @@
 #include "Engine.h"
-#include "Asteroid.h"
+#include "SpaceObj.h"
 #include <iostream>
 
 // copy SDL2 directory into project folder
@@ -17,7 +17,8 @@ Engine::Engine(int width, int height)
 	init();
 	background = SpaceObj(winRenderer, 0, 0, "img/background.png");
 
-	asteroidQuant = 10;
+	asteroidQuant = sizeof(asteroid)/sizeof(asteroid[0]);
+	std::cout << "asteroidquant: " << asteroidQuant;
 	for (int i = 0; i < asteroidQuant; i++) {
 		int randPos = rand() % 240 - rand() % 100;
 		asteroid[i] = SpaceObj(winRenderer, randPos, randPos, "img/big_asteroid.png");
@@ -25,7 +26,18 @@ Engine::Engine(int width, int height)
 	}
 	
 	spaceship = SpaceObj(winRenderer, winRect.w / 2, winRect.h / 2, "img/spaceship.png");
-	
+
+	bulletQuant = sizeof(bullet) / sizeof(bullet[0]);
+	std::cout << "bulletquant : " << bulletQuant;
+	for (int i = 0; i < bulletQuant; i++) {
+		bullet[i] =  Bullet(winRenderer, spaceship.getPosRect().x, spaceship.getPosRect().y, "img/bullet.png");
+		bullet[i].destroy();
+	}
+
+
+
+
+
 
 }
 
@@ -125,12 +137,9 @@ void Engine::update()
 
 		asteroid[i].isIntersect(spaceship.getCentrX(), spaceship.getCentrY(), spaceship.getRadius());
 		//asteroid[i].isIntersect(asteroid[i+1].getCentrX(), asteroid[i + 1].getCentrY(), asteroid[i + 1].getRadius());
-
-		
-		//asteroid[i].setAngle(asteroid[i].getAngle() + rand() % 20 - rand() % 20);
 		asteroid[i].move(winRect);
-		
 	}
+
 	spaceship.clearTexture();
 	for (int i = 0; i < asteroidQuant; i++) {
 
@@ -140,6 +149,13 @@ void Engine::update()
 		
 	}
 
+	for (int i = 0; i < bulletQuant; i++) {
+		if (bullet[i].exists()) {
+			bullet[i].moveDestroy(winRect);
+		}
+	
+	}
+	
 	//std::cout << "Calculating objects in world..." << std::endl;
 	if (keyState[SDL_SCANCODE_UP]) {
 		spaceship.move(winRect);
@@ -147,7 +163,7 @@ void Engine::update()
 	}
 
 	if (keyState[SDL_SCANCODE_DOWN]) {
-
+		
 		std::cout << " Down " << std::endl;
 	}
 
@@ -160,6 +176,26 @@ void Engine::update()
 		spaceship.setAngle(spaceship.getAngle() + 5);
 		std::cout << " Right " << std::endl;
 	}
+
+	if (keyState[SDL_SCANCODE_SPACE]) {
+		//spaceship.setAngle(spaceship.getAngle() + 5);
+
+		//bullet shoot
+		for (int i = 0; i < bulletQuant; i++) {
+			if (! bullet[i].exists()) {
+				bullet[i].create();
+				bullet[i].setAngle(spaceship.getAngle());
+				bullet[i].setPosX(spaceship.getPosRect().x);
+				bullet[i].setPosY(spaceship.getPosRect().y);
+				break;
+			}
+		}
+
+
+		std::cout << " Space " << std::endl;
+	}
+
+
 }
 
 void Engine::draw()
@@ -177,11 +213,25 @@ void Engine::draw()
 			renderRect = asteroid[i].getPosRect();
 			SDL_RenderCopy(winRenderer, asteroid[i].getTexture(), NULL, &renderRect);
 		}
-		
+
 	}
-	
+
+
 	renderRect = spaceship.getPosRect();
 	SDL_RenderCopyEx(winRenderer, spaceship.getTexture(), NULL, &renderRect, (double)(spaceship.getAngle() + 90), NULL, SDL_FLIP_NONE);
+
+
+	for (int i = 0; i < bulletQuant; i++) {
+		if (bullet[i].exists()) {
+			renderRect = bullet[i].getPosRect();
+			//SDL_Texture* tex = bullet[i].getTexture();
+			//std::cout <<"still here" << " : " << renderRect.x << " : " << renderRect.y << " : " << renderRect.w << " : "<< renderRect.h;
+			SDL_RenderCopy(winRenderer, bullet[i].getTexture(), NULL, &renderRect);
+
+		}
+	}
+
+
 
 	SDL_RenderPresent(winRenderer);
 	
@@ -190,12 +240,17 @@ void Engine::draw()
 
 void Engine::run()
 {
+	
+
 	while (isRunning) {//start of main loop
+
+
 		processInput();
 		update();
 		draw();
-	}//end of main loop
 
+
+	}//end of main loop
 
 
 }

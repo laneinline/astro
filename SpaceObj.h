@@ -2,6 +2,7 @@
 
 #include <SDL.h>
 #include <SDL_image.h>
+#include <iostream>
 #include <string>
 
 class SpaceObj
@@ -18,23 +19,30 @@ public:
 
 
 	SDL_Rect getPosRect();
+
 	int getAngle();
 	void setAngle(int ang);
 	
 	int getVelocity();
 	int getRadius();
 
-	void move(SDL_Rect boundary);
+	virtual void move(SDL_Rect boundary);
+	virtual void moveDestroy(SDL_Rect boundary);
+
 	bool isIntersect(int x, int y, int collisionTargetRadius);
 
 	int getCentrX();
 	int getCentrY();
 	void clearTexture();
 
+	void setPosX(int x);
+	void setPosY(int y);
+
+	void create();
 	bool exists();
 	void destroy();
 
-private:
+protected:
 
 	std::string path2img;
 
