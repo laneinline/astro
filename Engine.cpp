@@ -13,10 +13,18 @@ Engine::Engine(int width, int height)
 {
 	isRunning = true;
 	
+
 	preInit(width,height);
 	init();
+	
+	prevTime = 0;
+	currentTime = 0;
+	deltaTime = 0;
+
 	background = SpaceObj(winRenderer, 0, 0, "img/background.png");
 
+	
+	
 	asteroidQuant = sizeof(asteroid)/sizeof(asteroid[0]);
 	std::cout << "asteroidquant: " << asteroidQuant;
 	for (int i = 0; i < asteroidQuant; i++) {
@@ -76,7 +84,7 @@ void Engine::init()
 		else {
 			std::cout << "Window created, size: w: " << winRect.w << " h: " << winRect.h << std::endl;
 
-			winRenderer = SDL_CreateRenderer(window, -1, SDL_RENDERER_ACCELERATED | SDL_RENDERER_PRESENTVSYNC); // TODO vsync is slow  deletete it  after timer realization
+			winRenderer = SDL_CreateRenderer(window, -1, SDL_RENDERER_ACCELERATED);// | SDL_RENDERER_PRESENTVSYNC); // TODO vsync is slow  deletete it  after timer realization
 			if (winRenderer == NULL) { std::cout << "Error Renderer creation " << std::endl; }
 			else {
 				std::cout << "Renderer created sucessfully" << std::endl;
@@ -196,6 +204,8 @@ void Engine::update()
 	}
 
 
+
+
 }
 
 void Engine::draw()
@@ -240,14 +250,29 @@ void Engine::draw()
 
 void Engine::run()
 {
-	
+	int lag = 0;
 
 	while (isRunning) {//start of main loop
+		prevTime = currentTime;
+		currentTime = SDL_GetTicks();
+		deltaTime = currentTime - prevTime;
+		std::cout << " delta time " << deltaTime << std::endl;
+		
+		lag += deltaTime;
 
+		int millisecPerUpdate = 17;
 
 		processInput();
-		update();
+
+		while (lag >= millisecPerUpdate) {
+			update();
+			lag -= millisecPerUpdate;
+		}		
+
 		draw();
+
+
+
 
 
 	}//end of main loop

@@ -21,18 +21,13 @@ public:
 	void draw();
 	
 	void run();
-
-
-
-
-	void crAsteroid(int size);
-	void crSpaceship();
-	void crBullet();
 	
 
 private:
 	
-
+	int prevTime;
+	int currentTime;
+	int deltaTime;
 
 	SDL_Rect winRect;
 	SDL_Window* window;
