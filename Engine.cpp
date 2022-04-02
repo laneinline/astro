@@ -21,6 +21,7 @@ Engine::Engine(int width, int height)
 	for (int i = 0; i < asteroidQuant; i++) {
 		int randPos = rand() % 240 - rand() % 100;
 		asteroid[i] = SpaceObj(winRenderer, randPos, randPos, "img/big_asteroid.png");
+		asteroid[i].setAngle(rand()%360);
 	}
 	
 	spaceship = SpaceObj(winRenderer, winRect.w / 2, winRect.h / 2, "img/spaceship.png");
@@ -105,24 +106,38 @@ void Engine::processInput()
 
 void Engine::update()
 {
+	int ang; 
 	for (int i = 0; i < asteroidQuant; i++) {
 		asteroid[i].clearTexture();
 		for (int y = 0; y < asteroidQuant; y++) {
-		 if(i!=y)asteroid[i].isIntersect(asteroid[y].getCentrX(), asteroid[y].getCentrY(), asteroid[y].getRadius());
+			if (i != y) { 
+				if (asteroid[i].isIntersect(asteroid[y].getCentrX(), asteroid[y].getCentrY(), asteroid[y].getRadius())) {
+					
+					//brownian movement
+					ang = asteroid[y].getAngle();
+					asteroid[y].setAngle(-1 * ang);
+					ang = asteroid[i].getAngle();
+					asteroid[i].setAngle(-1 * ang);
+				}
+			}
+
 		}
 
 		asteroid[i].isIntersect(spaceship.getCentrX(), spaceship.getCentrY(), spaceship.getRadius());
 		//asteroid[i].isIntersect(asteroid[i+1].getCentrX(), asteroid[i + 1].getCentrY(), asteroid[i + 1].getRadius());
 
 		
-		asteroid[i].setAngle(asteroid[i].getAngle() + rand() % 20 - rand() % 20);
+		//asteroid[i].setAngle(asteroid[i].getAngle() + rand() % 20 - rand() % 20);
 		asteroid[i].move(winRect);
 		
 	}
 	spaceship.clearTexture();
 	for (int i = 0; i < asteroidQuant; i++) {
 
-		spaceship.isIntersect(asteroid[i].getCentrX(), asteroid[i].getCentrY(), asteroid[i].getRadius());
+		if (spaceship.isIntersect(asteroid[i].getCentrX(), asteroid[i].getCentrY(), asteroid[i].getRadius())) {
+			asteroid[i].destroy();
+		}
+		
 	}
 
 	//std::cout << "Calculating objects in world..." << std::endl;
@@ -158,8 +173,11 @@ void Engine::draw()
 
 
 	for (int i = 0; i < asteroidQuant; i++) {
-		renderRect = asteroid[i].getPosRect();
-		SDL_RenderCopy(winRenderer, asteroid[i].getTexture(), NULL, &renderRect);
+		if (asteroid[i].exists()) {
+			renderRect = asteroid[i].getPosRect();
+			SDL_RenderCopy(winRenderer, asteroid[i].getTexture(), NULL, &renderRect);
+		}
+		
 	}
 	
 	renderRect = spaceship.getPosRect();

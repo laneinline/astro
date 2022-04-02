@@ -25,11 +25,14 @@ public:
 	int getRadius();
 
 	void move(SDL_Rect boundary);
-	void isIntersect(int x, int y, int collisionTargetRadius);
+	bool isIntersect(int x, int y, int collisionTargetRadius);
 
 	int getCentrX();
 	int getCentrY();
 	void clearTexture();
+
+	bool exists();
+	void destroy();
 
 private:
 
@@ -46,6 +49,8 @@ private:
 
 	int angle;
 	int velocity;
+
+	bool exist;
 
 };
 

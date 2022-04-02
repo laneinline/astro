@@ -9,6 +9,8 @@ SpaceObj::SpaceObj()
 SpaceObj::SpaceObj(SDL_Renderer *renderer, int x, int y, std::string path)
 {
 	//TODO add checks & handlers
+	exist = true;
+
 	path2img = path;
 	
 	posRect.x = x;
@@ -114,8 +116,9 @@ void SpaceObj::move(SDL_Rect boundary)
 
 }
 
-void SpaceObj::isIntersect(int x ,int y, int  collisionTargetRadius)
+bool SpaceObj::isIntersect(int x ,int y, int  collisionTargetRadius)
 {
+	bool intersect;
 	centrX = getCentrX(); 
 	centrY = getCentrY();
 
@@ -128,10 +131,14 @@ void SpaceObj::isIntersect(int x ,int y, int  collisionTargetRadius)
 			+ collisionTargetRadius * collisionTargetRadius) //radius target
 		) {
 		SDL_SetTextureColorMod(texture, 255, 0, 0);
+		//angle *= -1;
+		intersect = true;
 	}
 	else {
+		intersect = false;
 		//SDL_SetTextureColorMod(texture, 255, 255, 255);
 	}
+	return intersect;
 }
 
 int SpaceObj::getCentrX()
@@ -147,6 +154,16 @@ int SpaceObj::getCentrY()
 void SpaceObj::clearTexture()
 {
 	SDL_SetTextureColorMod(texture, 255, 255, 255);
+}
+
+bool SpaceObj::exists()
+{
+	return exist;
+}
+
+void SpaceObj::destroy()
+{
+	exist = false;
 }
 
 
