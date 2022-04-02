@@ -14,9 +14,13 @@ Engine::Engine(int width, int height)
 	preInit(width,height); // load window size, timers =0 etc....
 	init(); // SDL window initialization and basic Error checks
 	
-	
+	keysPressed.insert(std::make_pair("Up",0));
+	keysPressed.insert(std::make_pair("Down", 0));
+	keysPressed.insert(std::make_pair("Left", 0));
+	keysPressed.insert(std::make_pair("Right", 0));
+	keysPressed.insert(std::make_pair("Space", 0));
 
-
+	//std::cout << " Key map size : " << keysPressed.size()<< keysPressed.at("Left");
 
 	background = SpaceObj(winRenderer, 0, 0, "img/background.png");
 		
@@ -69,6 +73,7 @@ void Engine::preInit(int width, int height)
 	prevTime = 0;
 	currentTime = 0;
 	deltaTime = 0;
+	lag = 0;
 }
 
 void Engine::init()
@@ -119,7 +124,17 @@ void Engine::processInput()
 		
 	}
 
-	keyState = SDL_GetKeyboardState(NULL);		
+	keyState = SDL_GetKeyboardState(NULL);
+
+	if (keyState[SDL_SCANCODE_UP]) { keysPressed.at("Up") = 1; }
+
+	if (keyState[SDL_SCANCODE_DOWN]) { keysPressed.at("Down") = 1; }
+
+	if (keyState[SDL_SCANCODE_LEFT]) { keysPressed.at("Left") = 1; }
+
+	if (keyState[SDL_SCANCODE_RIGHT]) { keysPressed.at("Right") = 1; }
+
+	if (keyState[SDL_SCANCODE_SPACE]) { keysPressed.at("Space") = 1; }
 
 }
 
@@ -142,17 +157,30 @@ void Engine::update()
 
 		}
 
-		asteroid[i].isIntersect(spaceship.getCentrX(), spaceship.getCentrY(), spaceship.getRadius());
+		//asteroid[i].isIntersect(spaceship.getCentrX(), spaceship.getCentrY(), spaceship.getRadius());
 		//asteroid[i].isIntersect(asteroid[i+1].getCentrX(), asteroid[i + 1].getCentrY(), asteroid[i + 1].getRadius());
 		asteroid[i].move(winRect);
 	}
 
-	spaceship.clearTexture();
-	for (int i = 0; i < asteroidQuant; i++) {
-
-		if (spaceship.isIntersect(asteroid[i].getCentrX(), asteroid[i].getCentrY(), asteroid[i].getRadius())) {
-			asteroid[i].destroy();
+	//spaceship.clearTexture();
+	for (int i = 0; i < bulletQuant; i++) {
+		for (int y = 0; y < asteroidQuant; y++) {
+			if (bullet[i].isIntersect(asteroid[y].getCentrX(), asteroid[y].getCentrY(), asteroid[y].getRadius())) {
+				
+				if (bullet[i].exists()) {
+					bullet[i].destroy();
+					asteroid[y].destroy();
+				}
+				
+			
+			
+			}
 		}
+
+
+		//if (spaceship.isIntersect(asteroid[i].getCentrX(), asteroid[i].getCentrY(), asteroid[i].getRadius())) {
+			//asteroid[i].destroy();
+		//}
 		
 	}
 
@@ -164,48 +192,47 @@ void Engine::update()
 	}
 	
 	//std::cout << "Calculating objects in world..." << std::endl;
-	if (keyState[SDL_SCANCODE_UP]) {
+	if (keysPressed.at("Up") > 0) {
 		spaceship.move(winRect);
-
 		std::cout << " Up " << std::endl;
 	}
 
-	if (keyState[SDL_SCANCODE_DOWN]) {
-		
+	if (keysPressed.at("Down") > 0) {
 		std::cout << " Down " << std::endl;
 	}
 
-	if (keyState[SDL_SCANCODE_LEFT]) {
+	if (keysPressed.at("Left") > 0) {
 		spaceship.setAngle(spaceship.getAngle() - 5);
 		std::cout << " Left " << std::endl;
 	}
 
-	if (keyState[SDL_SCANCODE_RIGHT]) {
+	if (keysPressed.at("Right") > 0 ) {
 		spaceship.setAngle(spaceship.getAngle() + 5);
 		std::cout << " Right " << std::endl;
 	}
 
-	if (keyState[SDL_SCANCODE_SPACE]) {
-		//spaceship.setAngle(spaceship.getAngle() + 5);
-
+	if (keysPressed.at("Space") > 0 ) {
 		//bullet shoot
-		for (int i = 0; i < bulletQuant; i++) {
-			if (! bullet[i].exists()) {
-				bullet[i].create();
-				bullet[i].setAngle(spaceship.getAngle());
-				bullet[i].setPosX(spaceship.getPosRect().x);
-				bullet[i].setPosY(spaceship.getPosRect().y);
-				break;
+
+			for (int i = 0; i < bulletQuant; i++) {
+				if (!bullet[i].exists()) {
+					bullet[i].create();
+					bullet[i].setAngle(spaceship.getAngle());
+					bullet[i].setPosX(spaceship.getPosRect().x);
+					bullet[i].setPosY(spaceship.getPosRect().y);
+					break;
+				}
 			}
-		}
+
+
 
 
 		std::cout << " Space " << std::endl;
 	}
-
-
-
-
+	
+	for (std::map<std::string, int>::iterator it = keysPressed.begin(); it != keysPressed.end(); ++it) { //keys  map reset
+		it->second = 0;
+	}
 }
 
 void Engine::draw()
@@ -250,7 +277,7 @@ void Engine::draw()
 
 void Engine::run()
 {
-	int lag = 0;
+	int resetTime = 0;
 
 	while (isRunning) {//start of main loop
 		prevTime = currentTime;
@@ -259,6 +286,7 @@ void Engine::run()
 		//std::cout << " delta time " << deltaTime << std::endl;
 		
 		lag += deltaTime;
+		resetTime += deltaTime;
 
 		int millisecPerUpdate = 17;
 
@@ -271,6 +299,14 @@ void Engine::run()
 
 		draw();
 
+		if (resetTime > 5000) {
+			
+			for (int i = 0; i < asteroidQuant; i++) {
+				asteroid[i].create();
+			}
+			resetTime = 0;
+		
+		}
 
 
 

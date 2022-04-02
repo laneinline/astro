@@ -3,6 +3,7 @@
 #include <SDL.h>
 #include <SDL_image.h>
 #include <string>
+#include <iterator>
 #include <map>
 
 #include "SpaceObj.h"
@@ -33,6 +34,7 @@ private:
 	int prevTime;
 	int currentTime;
 	int deltaTime;
+	int lag;
 
 	SDL_Rect winRect;
 	SDL_Window* window;
