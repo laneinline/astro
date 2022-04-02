@@ -3,9 +3,12 @@
 #include <SDL.h>
 #include <SDL_image.h>
 #include <string>
+#include <map>
+
 #include "SpaceObj.h"
 #include "Asteroid.h"
 #include "Bullet.h"
+
 
 class Engine
 {
@@ -24,6 +27,8 @@ public:
 	
 
 private:
+
+	std::map <std::string, int> keysPressed;
 	
 	int prevTime;
 	int currentTime;
@@ -49,7 +54,7 @@ private:
 	SpaceObj background;
 	SpaceObj spaceship;
 
-	SpaceObj bullet[10];
+	SpaceObj bullet[250];
 	int bulletQuant ;
 
 

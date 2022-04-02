@@ -11,20 +11,15 @@
 
 Engine::Engine(int width, int height)
 {
-	isRunning = true;
+	preInit(width,height); // load window size, timers =0 etc....
+	init(); // SDL window initialization and basic Error checks
+	
 	
 
-	preInit(width,height);
-	init();
-	
-	prevTime = 0;
-	currentTime = 0;
-	deltaTime = 0;
+
 
 	background = SpaceObj(winRenderer, 0, 0, "img/background.png");
-
-	
-	
+		
 	asteroidQuant = sizeof(asteroid)/sizeof(asteroid[0]);
 	std::cout << "asteroidquant: " << asteroidQuant;
 	for (int i = 0; i < asteroidQuant; i++) {
@@ -51,8 +46,7 @@ Engine::Engine(int width, int height)
 
 Engine::~Engine()
 {
-	isRunning = false;
-
+	isRunning = false; //TODO LEAKS here , do something
 
 	SDL_DestroyWindow(window);
 	window = nullptr;
@@ -61,6 +55,8 @@ Engine::~Engine()
 
 void Engine::preInit(int width, int height)
 {
+	isRunning = true;
+
 	winRect.x = 0; //window dimensions
 	winRect.y = 0;
 	winRect.w = 640;
@@ -70,6 +66,9 @@ void Engine::preInit(int width, int height)
 	if (height >= 240 && height < 4500) winRect.h = height;
 	else { std::cout << "Error creating window: window height is not supported" << std::endl; }
 
+	prevTime = 0;
+	currentTime = 0;
+	deltaTime = 0;
 }
 
 void Engine::init()
@@ -167,6 +166,7 @@ void Engine::update()
 	//std::cout << "Calculating objects in world..." << std::endl;
 	if (keyState[SDL_SCANCODE_UP]) {
 		spaceship.move(winRect);
+
 		std::cout << " Up " << std::endl;
 	}
 
@@ -256,7 +256,7 @@ void Engine::run()
 		prevTime = currentTime;
 		currentTime = SDL_GetTicks();
 		deltaTime = currentTime - prevTime;
-		std::cout << " delta time " << deltaTime << std::endl;
+		//std::cout << " delta time " << deltaTime << std::endl;
 		
 		lag += deltaTime;
 
@@ -264,7 +264,7 @@ void Engine::run()
 
 		processInput();
 
-		while (lag >= millisecPerUpdate) {
+		while (lag >= millisecPerUpdate) { //time loop  wait
 			update();
 			lag -= millisecPerUpdate;
 		}		
