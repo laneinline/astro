@@ -103,7 +103,8 @@
       <AdditionalDependencies>SDL2.lib;SDL2main.lib;SDL2_image.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
     <PostBuildEvent>
-      <Command>xcopy /d /y "$(ProjectDir)SDL2\lib\x64\*.*" "$(OutDir)"</Command>
+      <Command>xcopy /d /y "$(ProjectDir)SDL2\lib\x64\*.*" "$(OutDir)"
+XCOPY "$(SolutionDir)img" "$(OutDir)img\" /S /Y</Command>
     </PostBuildEvent>
     <PostBuildEvent>
       <Message>put ddls SDL2  to final dir</Message>
@@ -126,7 +127,8 @@
       <AdditionalDependencies>SDL2.lib;SDL2main.lib;SDL2_image.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
     <PostBuildEvent>
-      <Command>xcopy /d /y "$(ProjectDir)SDL2\lib\x64\*.*" "$(OutDir)"</Command>
+      <Command>xcopy /d /y "$(ProjectDir)SDL2\lib\x64\*.*" "$(OutDir)"
+XCOPY "$(SolutionDir)img" "$(OutDir)img\" /S /Y</Command>
     </PostBuildEvent>
     <PostBuildEvent>
       <Message>put ddls SDL2  to final dir</Message>
@@ -145,7 +147,8 @@
       <AdditionalDependencies>SDL2.lib;SDL2main.lib;SDL2_image.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
     <PostBuildEvent>
-      <Command>xcopy /d /y "$(ProjectDir)SDL2\lib\x64\*.*" "$(OutDir)"</Command>
+      <Command>xcopy /d /y "$(ProjectDir)SDL2\lib\x64\*.*" "$(OutDir)"
+XCOPY "$(SolutionDir)img" "$(OutDir)img\" /S /Y</Command>
     </PostBuildEvent>
     <PostBuildEvent>
       <Message>put ddls SDL2  to final dir</Message>
@@ -168,7 +171,8 @@
       <AdditionalDependencies>SDL2.lib;SDL2main.lib;SDL2_image.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
     <PostBuildEvent>
-      <Command>xcopy /d /y "$(ProjectDir)SDL2\lib\x64\*.*" "$(OutDir)"</Command>
+      <Command>xcopy /d /y "$(ProjectDir)SDL2\lib\x64\*.*" "$(OutDir)"
+XCOPY "$(SolutionDir)img" "$(OutDir)img\" /S /Y</Command>
     </PostBuildEvent>
     <PostBuildEvent>
       <Message>put ddls SDL2  to final dir</Message>
