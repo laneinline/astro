@@ -60,6 +60,8 @@ private:
 	SpaceObj bullet[250];
 	int bulletQuant ;
 
+	SpaceObj crosshair;
+
 
 };
 

@@ -21,6 +21,8 @@ Engine::Engine(int width, int height)
 	background = SpaceObj(winRenderer, 0, 0, "img/background.png");
 
 	spaceship = SpaceObj(winRenderer, winRect.w / 2, winRect.h / 2, "img/spaceship.png");
+
+	crosshair = SpaceObj(winRenderer, 0, 0, "img/reticle.png");
 		
 	asteroidQuant = sizeof(asteroid)/sizeof(asteroid[0]);
 	std::cout << "asteroidquant: " << asteroidQuant;
@@ -92,7 +94,7 @@ void Engine::preInit(int width, int height)
 	keysPressed.insert(std::make_pair("mbLeft", 0));
 	keysPressed.insert(std::make_pair("mbMid", 0));
 	keysPressed.insert(std::make_pair("mbRight",0));
-	keysPressed.insert(std::make_pair("MouseMoved", 0));
+	keysPressed.insert(std::make_pair("MouseMov", 0));
 
 
 }
@@ -132,19 +134,15 @@ void Engine::processInput()
 
 		if (ev.type == SDL_MOUSEBUTTONDOWN) { //TODO  store mouse position  and move it to update()  somewhere here mouse click locks program move
 			
-
-			if (ev.button.button == SDL_BUTTON_LEFT) { keysPressed.at("mbLeft") = 1;  }
-
-			else if (ev.button.button == SDL_BUTTON_MIDDLE) {
-				std::cout << " Middle mouse button down at: " << mousePos.x << " x " << mousePos.y << std::endl;
+			if (ev.button.button == SDL_BUTTON_LEFT) { keysPressed.at("mbLeft") = 1;  
 			}
-			else if (ev.button.button == SDL_BUTTON_RIGHT) {
-				std::cout << " Right mouse button down at: " << mousePos.x << " x " << mousePos.y << std::endl;
+			else if (ev.button.button == SDL_BUTTON_MIDDLE) { std::cout << " Middle mouse button down at: " << mousePos.x << " x " << mousePos.y << std::endl;
+			}
+			else if (ev.button.button == SDL_BUTTON_RIGHT) { std::cout << " Right mouse button down at: " << mousePos.x << " x " << mousePos.y << std::endl;
 			}
 		}
-		if (ev.type == SDL_MOUSEMOTION) {
-			
-			// std::cout<< " Mouse pos is : " << mousePos.x << " x " << mousePos.y << std::endl;
+
+		if (ev.type == SDL_MOUSEMOTION) { keysPressed.at("MouseMov") = 1;	// std::cout<< " Mouse pos is : " << mousePos.x << " x " << mousePos.y << std::endl;
 		}
 
 	}
@@ -271,11 +269,14 @@ void Engine::update()
 				bullet[i].setAngle(mouseAng + 180);
 				break;
 			}
-
 		}
-		//std::cout << " Left mouse button down at: " << mousePos.x << " x " << mousePos.y << std::endl;
 	}
 
+	if (keysPressed.at("MouseMov") >0) {
+		//TODO move crosshair to center instead of x:y
+		crosshair.setPosX(mousePos.x);
+		crosshair.setPosY(mousePos.y);
+	}
 
 
 
@@ -319,6 +320,8 @@ void Engine::draw()
 		}
 	}
 
+	renderRect = crosshair.getPosRect();
+	SDL_RenderCopy(winRenderer, crosshair.getTexture(), NULL, &renderRect);
 
 
 	SDL_RenderPresent(winRenderer);
