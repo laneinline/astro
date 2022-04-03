@@ -69,6 +69,8 @@ void Engine::preInit(int width, int height)
 {
 	isRunning = true;
 
+
+
 	winRect.x = 0; //window dimensions
 	winRect.y = 0;
 	winRect.w = 640;
@@ -332,6 +334,8 @@ void Engine::draw()
 void Engine::run()
 {
 	int resetTime = 0;
+	// Hide cursor 
+	SDL_ShowCursor(SDL_DISABLE);
 
 	while (isRunning) {//start of main loop
 		prevTime = currentTime;
