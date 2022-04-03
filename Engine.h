@@ -46,6 +46,7 @@ private:
 
 	const Uint8* keyState;
 	SDL_Point mousePos;
+	double mouseAng;
 
 	bool isRunning;
 

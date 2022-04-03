@@ -11,7 +11,7 @@
 
 Engine::Engine(int width, int height)
 {
-	preInit(width,height); // load window size, timers =0 etc....
+	preInit(width,height); // load window size, timers set to 0, etc....
 	init(); // SDL window initialization and basic Error checks
 	
 
@@ -44,6 +44,7 @@ Engine::Engine(int width, int height)
 	for (int i = 0; i < bulletQuant; i++) {
 		bullet[i] =  Bullet(winRenderer, spaceship.getPosRect().x, spaceship.getPosRect().y, "img/bullet.png");
 		bullet[i].destroy();
+		bullet[i].setVelocity(10);
 	}
 
 
@@ -80,11 +81,19 @@ void Engine::preInit(int width, int height)
 	deltaTime = 0;
 	lag = 0;
 
+	mouseAng = 0;
+
 	keysPressed.insert(std::make_pair("Up", 0));
 	keysPressed.insert(std::make_pair("Down", 0));
 	keysPressed.insert(std::make_pair("Left", 0));
 	keysPressed.insert(std::make_pair("Right", 0));
 	keysPressed.insert(std::make_pair("Space", 0));
+	// mouse  in map for now
+	keysPressed.insert(std::make_pair("mbLeft", 0));
+	keysPressed.insert(std::make_pair("mbMid", 0));
+	keysPressed.insert(std::make_pair("mbRight",0));
+	keysPressed.insert(std::make_pair("MouseMoved", 0));
+
 
 }
 
@@ -114,26 +123,30 @@ void Engine::init()
 void Engine::processInput()
 {
 	//std::cout << "Processing input..." << std::endl;
-	
+	SDL_GetMouseState(&mousePos.x, &mousePos.y);
+
 	while (SDL_PollEvent(&ev)) {//handle  window close button
+		
 		if (ev.type == SDL_QUIT) {
 			isRunning = false; };
 
 		if (ev.type == SDL_MOUSEBUTTONDOWN) { //TODO  store mouse position  and move it to update()  somewhere here mouse click locks program move
-			SDL_GetMouseState(&mousePos.x, &mousePos.y);
+			
 
-			if (ev.button.button == SDL_BUTTON_LEFT) {
-				std::cout << " Left mouse button down at: " << mousePos.x << " x " << mousePos.y << std::endl;
-			}
+			if (ev.button.button == SDL_BUTTON_LEFT) { keysPressed.at("mbLeft") = 1;  }
+
 			else if (ev.button.button == SDL_BUTTON_MIDDLE) {
 				std::cout << " Middle mouse button down at: " << mousePos.x << " x " << mousePos.y << std::endl;
 			}
 			else if (ev.button.button == SDL_BUTTON_RIGHT) {
 				std::cout << " Right mouse button down at: " << mousePos.x << " x " << mousePos.y << std::endl;
 			}
-
 		}
-		
+		if (ev.type == SDL_MOUSEMOTION) {
+			
+			// std::cout<< " Mouse pos is : " << mousePos.x << " x " << mousePos.y << std::endl;
+		}
+
 	}
 
 	keyState = SDL_GetKeyboardState(NULL);
@@ -179,7 +192,7 @@ void Engine::update()
 		for (int y = 0; y < asteroidQuant; y++) {
 			if (bullet[i].isIntersect(asteroid[y].getCentrX(), asteroid[y].getCentrY(), asteroid[y].getRadius())) {
 				
-				if (bullet[i].exists()) {
+				if (bullet[i].exists()&& asteroid[y].exists()) {
 					bullet[i].destroy();
 					asteroid[y].destroy();
 				}
@@ -202,7 +215,7 @@ void Engine::update()
 		}
 	
 	}
-	
+	//TODO make it callback instead
 	//std::cout << "Calculating objects in world..." << std::endl;
 	if (keysPressed.at("Up") > 0) {
 		spaceship.move(winRect);
@@ -235,13 +248,39 @@ void Engine::update()
 					break;
 				}
 			}
-
-
-
-
 		std::cout << " Space " << std::endl;
 	}
 	
+	if (keysPressed.at("mbLeft")>0) {
+		for (int i = 0; i < bulletQuant; i++) {
+			if (!bullet[i].exists()) {
+
+				bullet[i].create();
+				bullet[i].setAngle(spaceship.getAngle());
+
+	
+				mouseAng = 0;
+				mouseAng = atan2(spaceship.getPosRect().y - mousePos.y, spaceship.getPosRect().x - mousePos.x) * 180 / 3,1415 +180 ;
+			
+				//std::cout << "spaceship.getPosRect().x" << spaceship.getPosRect().x << " y: " << spaceship.getPosRect().x << std::endl;
+				//std::cout << "mousePos.x" << mousePos.x << " y: " << mousePos.y << std::endl;
+				//std::cout << "calculated angle between mouse and sShip " << mouseAng   << std::endl;
+
+				bullet[i].setPosX(spaceship.getPosRect().x);
+				bullet[i].setPosY(spaceship.getPosRect().y);
+				bullet[i].setAngle(mouseAng + 180);
+				break;
+			}
+
+		}
+		//std::cout << " Left mouse button down at: " << mousePos.x << " x " << mousePos.y << std::endl;
+	}
+
+
+
+
+
+
 	for (std::map<std::string, int>::iterator it = keysPressed.begin(); it != keysPressed.end(); ++it) { //keys  map reset
 		it->second = 0;
 	}
@@ -315,7 +354,8 @@ void Engine::run()
 			
 			for (int i = 0; i < asteroidQuant; i++) {
 				
-
+				// move asteroid spawn outside of the ship
+				//TODO move this to class specific method
 				if (asteroid[i].isIntersect(spaceship.getPosRect().x, spaceship.getPosRect().y, winRect.h / 1.2) && !asteroid[i].exists()) {
 					asteroid[i].setPosX(1);
 					asteroid[i].setPosY(1);

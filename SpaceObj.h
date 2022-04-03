@@ -24,6 +24,7 @@ public:
 	void setAngle(int ang);
 	
 	int getVelocity();
+	void setVelocity(int vel);
 	int getRadius();
 
 	virtual void move(SDL_Rect boundary);

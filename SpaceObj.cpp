@@ -89,6 +89,18 @@ int SpaceObj::getVelocity()
 	return velocity;
 }
 
+void SpaceObj::setVelocity(int vel)
+{
+	if (vel >= 0 && vel <=100) {
+		velocity = vel;
+	}
+	else
+	{
+		std::cout << " something wrong with velocity set" << std::endl;
+	}
+
+}
+
 int SpaceObj::getRadius()
 {
 	return radius;
