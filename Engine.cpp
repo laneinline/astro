@@ -140,7 +140,19 @@ void Engine::processInput()
 			}
 			else if (ev.button.button == SDL_BUTTON_MIDDLE) { std::cout << " Middle mouse button down at: " << mousePos.x << " x " << mousePos.y << std::endl;
 			}
-			else if (ev.button.button == SDL_BUTTON_RIGHT) { std::cout << " Right mouse button down at: " << mousePos.x << " x " << mousePos.y << std::endl;
+			else if (ev.button.button == SDL_BUTTON_RIGHT) { 
+				
+					for (int i = 0; i < bulletQuant; i++) {
+						if (!bullet[i].exists()) {
+							bullet[i].create();
+							bullet[i].setAngle(spaceship.getAngle());
+							bullet[i].setPosX(spaceship.getPosRect().x);
+							bullet[i].setPosY(spaceship.getPosRect().y);
+
+						}
+					}
+				
+				std::cout << " Right mouse button down at: " << mousePos.x << " x " << mousePos.y << std::endl;
 			}
 		}
 
@@ -152,12 +164,16 @@ void Engine::processInput()
 	keyState = SDL_GetKeyboardState(NULL);
 
 	if (keyState[SDL_SCANCODE_UP]) { keysPressed.at("Up") = 1; }
+	if (keyState[SDL_SCANCODE_W]) { keysPressed.at("Up") = 1; }
 
 	if (keyState[SDL_SCANCODE_DOWN]) { keysPressed.at("Down") = 1; }
+	if (keyState[SDL_SCANCODE_S]) { keysPressed.at("Down") = 1; }
 
 	if (keyState[SDL_SCANCODE_LEFT]) { keysPressed.at("Left") = 1; }
+	if (keyState[SDL_SCANCODE_A]) { keysPressed.at("Left") = 1; }
 
 	if (keyState[SDL_SCANCODE_RIGHT]) { keysPressed.at("Right") = 1; }
+	if (keyState[SDL_SCANCODE_D]) { keysPressed.at("Right") = 1; }
 
 	if (keyState[SDL_SCANCODE_SPACE]) { keysPressed.at("Space") = 1; }
 
