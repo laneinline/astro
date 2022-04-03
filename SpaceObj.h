@@ -35,6 +35,7 @@ public:
 	int getCentrY();
 	void clearTexture();
 
+
 	void setPosX(int x);
 	void setPosY(int y);
 

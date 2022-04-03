@@ -14,15 +14,13 @@ Engine::Engine(int width, int height)
 	preInit(width,height); // load window size, timers =0 etc....
 	init(); // SDL window initialization and basic Error checks
 	
-	keysPressed.insert(std::make_pair("Up",0));
-	keysPressed.insert(std::make_pair("Down", 0));
-	keysPressed.insert(std::make_pair("Left", 0));
-	keysPressed.insert(std::make_pair("Right", 0));
-	keysPressed.insert(std::make_pair("Space", 0));
+
 
 	//std::cout << " Key map size : " << keysPressed.size()<< keysPressed.at("Left");
 
 	background = SpaceObj(winRenderer, 0, 0, "img/background.png");
+
+	spaceship = SpaceObj(winRenderer, winRect.w / 2, winRect.h / 2, "img/spaceship.png");
 		
 	asteroidQuant = sizeof(asteroid)/sizeof(asteroid[0]);
 	std::cout << "asteroidquant: " << asteroidQuant;
@@ -30,9 +28,16 @@ Engine::Engine(int width, int height)
 		int randPos = rand() % 240 - rand() % 100;
 		asteroid[i] = SpaceObj(winRenderer, randPos, randPos, "img/big_asteroid.png");
 		asteroid[i].setAngle(rand()%360);
+
+		//move out of center
+		if (asteroid[i].isIntersect(spaceship.getPosRect().x, spaceship.getPosRect().y, winRect.h/1.2)) {
+			asteroid[i].setPosX(1);
+			asteroid[i].setPosY(1);
+		}
+
 	}
 	
-	spaceship = SpaceObj(winRenderer, winRect.w / 2, winRect.h / 2, "img/spaceship.png");
+
 
 	bulletQuant = sizeof(bullet) / sizeof(bullet[0]);
 	std::cout << "bulletquant : " << bulletQuant;
@@ -74,6 +79,13 @@ void Engine::preInit(int width, int height)
 	currentTime = 0;
 	deltaTime = 0;
 	lag = 0;
+
+	keysPressed.insert(std::make_pair("Up", 0));
+	keysPressed.insert(std::make_pair("Down", 0));
+	keysPressed.insert(std::make_pair("Left", 0));
+	keysPressed.insert(std::make_pair("Right", 0));
+	keysPressed.insert(std::make_pair("Space", 0));
+
 }
 
 void Engine::init()
@@ -299,10 +311,17 @@ void Engine::run()
 
 		draw();
 
-		if (resetTime > 5000) {
+		if (resetTime > 5000) { //reset asteroids loop
 			
 			for (int i = 0; i < asteroidQuant; i++) {
+				
+
+				if (asteroid[i].isIntersect(spaceship.getPosRect().x, spaceship.getPosRect().y, winRect.h / 1.2) && !asteroid[i].exists()) {
+					asteroid[i].setPosX(1);
+					asteroid[i].setPosY(1);
+				}
 				asteroid[i].create();
+
 			}
 			resetTime = 0;
 		
