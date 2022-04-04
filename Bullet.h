@@ -4,6 +4,7 @@
 class Bullet :virtual public SpaceObj
 {
 public:
+    Bullet();
     //Bullet(void);
     Bullet(SDL_Renderer* renderer, int x, int y, std::string path) ;
 

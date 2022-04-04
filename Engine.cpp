@@ -227,7 +227,7 @@ void Engine::update()
 
 	for (int i = 0; i < bulletQuant; i++) {
 		if (bullet[i].exists()) {
-			bullet[i].moveDestroy(winRect);
+			bullet[i].move(winRect);
 		}
 	
 	}

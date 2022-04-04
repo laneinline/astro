@@ -1,6 +1,6 @@
 #include "Bullet.h"
 
-//Bullet::Bullet() :SpaceObj( renderer,  x,  y,  path) {}
+Bullet::Bullet() {}
 
 
 Bullet::Bullet(SDL_Renderer* renderer, int x, int y, std::string path) : SpaceObj(renderer,  x, y,  path) 
@@ -8,34 +8,26 @@ Bullet::Bullet(SDL_Renderer* renderer, int x, int y, std::string path) : SpaceOb
 	
 }
 
-void Bullet::move(SDL_Rect boundary) 
-{
-	std::cout << "still here";
 
-	if(exist)
+
+void Bullet::move(SDL_Rect boundary)
+{
 	posRect.x += velocity * cos(angle * 3.1415 / 180); //cpp cosinus in RADIANS
-	
 	if (posRect.x + posRect.w > boundary.w) {
 		exist = false;
-		//posRect.x = 0;
 	}
 	if (posRect.x < boundary.x) {
 		exist = false;
-		//posRect.x = boundary.w - posRect.w;
 	}
 	//std::cout << " angle : " << angle << " cos(angle) " << cos(angle) << std::endl;
-	if(exist)
 	posRect.y += velocity * sin(angle * 3.1415 / 180);
 
 	//std::cout << "posRect.y " << posRect.y << " boundary.y " << boundary.y << std::endl;// y - top left corner
 	//std::cout << "posRect.h " << posRect.h << " boundary.h " << boundary.h << std::endl;// y - top left corner
 	if (posRect.y < boundary.y) {
 		exist = false;
-		//posRect.y = boundary.h - posRect.h;
 	}
 	if ((posRect.y + posRect.h) > boundary.h) {
 		exist = false;
-		//posRect.y = 0;
 	}
-
 }
