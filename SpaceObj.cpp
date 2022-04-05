@@ -50,6 +50,9 @@ void SpaceObj::loadTexture(SDL_Renderer* renderer)
 		surface = IMG_Load(path2img.c_str());
 		if (surface == NULL) {
 			std::cout << typeid(this).name() << " SpaceObj Error loading image to surface" << IMG_GetError() << std::endl;
+			surface = SDL_CreateRGBSurface(0, 50,50,32,0,0,0,0);
+			SDL_FillRect(surface, NULL,SDL_MapRGB(surface->format, 255,0,0));
+			//red rectangles if something is wrong with img
 		}
 		else {
 			std::cout << typeid(this).name() << " SpaceObj Image loaded to surface sucessfully" << std::endl;
