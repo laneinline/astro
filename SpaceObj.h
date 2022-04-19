@@ -1,5 +1,4 @@
 #pragma once
-
 #include <SDL.h>
 #include <SDL_image.h>
 #include <iostream>
@@ -45,21 +44,21 @@ public:
 
 protected:
 
-	std::string path2img;
+	std::string path2img = " ";
 
-	SDL_Surface *surface;
-	SDL_Texture *texture;
+	SDL_Surface *surface =nullptr;
+	SDL_Texture *texture = nullptr;
 
-	SDL_Rect posRect;
+	SDL_Rect posRect = {0,0,0,0};
 
-	int radius;
-	int centrX;
-	int centrY;
+	int radius = 0;
+	int centrX = 0;
+	int centrY = 0;
 
-	int angle;
-	int velocity;
+	int angle = 0 ;
+	int velocity = 0;
 
-	bool exist;
+	bool exist = false;
 
 };
 

@@ -1,6 +1,6 @@
 #include "Bullet.h"
 
-Bullet::Bullet() {}
+Bullet::Bullet():SpaceObj() {}
 
 
 Bullet::Bullet(SDL_Renderer* renderer, int x, int y, std::string path) : SpaceObj(renderer,  x, y,  path) 

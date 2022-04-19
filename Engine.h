@@ -57,7 +57,7 @@ private:
 	SpaceObj background;
 	SpaceObj spaceship;
 
-	Bullet bullet[250];
+	Bullet bullet[20];
 	int bulletQuant ;
 
 	SpaceObj crosshair;
